@@ -19,17 +19,30 @@ When reviewing a pull request, always remember the past. That is, remember that 
 
 That said, we should not be afraid to change things for the better.
 
+If the tests do change significantly enough to break existing solutions, it's worth calling it out so that we can discuss whether or not the change is worth it in this particular case.
+
 ### Consider the Structural Requirements
 
-We have a tool, [`configlet`](https://github.com/exercism/configlet#configlet), which does track-level linting. This runs on Travis CI when a pull request is submitted. You can also [download it](https://github.com/exercism/configlet/releases/latest) and run it locally.
+We have a tool, [`configlet`](https://github.com/exercism/configlet#configlet), which does track-level linting. This runs on Travis CI when a pull request is submitted.
 
-- Is the test file named correctly, per the guidelines in the language track?
-- Is the example solution named with `/example/i` in the path? If not it will be served when people fetch the exercise.
-- Does the directory name of the exercise match that of [an existing, known exercism exercise slug](https://github.com/exercism/x-common/tree/master/exercises)?
-- Has the exercise been added to the `"exercises"` key in `config.json`?
+The tool checks the following (so you don't have to):
+
+- Is the `config.json` file syntactically correct?
+- Does the `config.json` list the correct exercises?
+    - Has every exercise listed been implemented?
+    - Has every implemented exercise been added to the config?
+    - Have any exercises been implemented that shouldn't have been? E.g. exercises that are inappropriate or uninteresting in the language.
+- Is the example solution named with `/example/i` in the path? If not that file will be served when people fetch the exercise.
+
+You can also [download it](https://github.com/exercism/configlet/releases/latest) and run it locally.
+
+Things that the tool does not yet do, and which should be checked:
+
+- Is the test file named correctly, per the guidelines in the language track? (TODO: add to `configlet`)
+
+If there is no automated checking, then you should also verify:
+
 - Do the tests pass against the example solution?
-- Do the tests use the data from the [`canonical-data.json`](https://github.com/exercism/x-common#test-data-format-canonical-datajson) file (if it exists)?
-- Are any of the deviations from `canonical-data.json` generally useful to other language tracks? If so, consider submitting them back to the x-common repository.
 
 ### Consider Future Maintainers
 
@@ -47,6 +60,7 @@ We have a tool, [`configlet`](https://github.com/exercism/configlet#configlet), 
 - Does the exercise pull in unnecessary dependencies?
 - Have all but the first test been skipped? (Only for tracks that use `pending` or `skip` or `ignore` directives)
 - If the exercise introduced difficult language features, is there a `HINTS.md` file that points to some good documentation about it?
+- Do the tests use the data from the [`canonical-data.json`](https://github.com/exercism/x-common#test-data-format-canonical-datajson) file (if it exists)? Are any of the deviations from `canonical-data.json` generally useful to other language tracks? _If so, consider submitting them back to the x-common repository._
 
 There is usually no right answer, and sometimes the best answer is "I don't know, we'll see."
 If it seems good enough we can merge it. It can always be improved later.
